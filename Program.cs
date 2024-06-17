@@ -38,6 +38,7 @@ int.TryParse(idElegirC,out idElegir);
         }
         iteracion++; 
     }
+    iteracion = 0;
 
 if(tareaEncontrada == 1){
 tareaRealizadas.Add(tareaPendientes[indice]);
@@ -45,6 +46,26 @@ tareaPendientes.RemoveAt(indice);
 }
 mostrarLista(tareaPendientes,"tareas pendientes");
 mostrarLista(tareaRealizadas,"tareas realizadas");
+
+//buscar tareas pendientes por descripcion//
+Console.WriteLine("ingrese la descripcion que desea buscar");
+string indicacion = Console.ReadLine();
+int coinciden = 0;
+foreach(Tarea tarea in tareaPendientes){
+    if(tarea.Descripcion.IndexOf(indicacion) != -1){
+        coinciden = 1;
+        indice = iteracion;
+    }
+    iteracion++;
+}
+
+if(coinciden == 1){
+    tareaPendientes[indice].mostrarTarea();
+}
+else{
+    Console.WriteLine("no se encontro la tarea");
+}
+
 
 
 static void mostrarLista(List<Tarea> lista,String nombreLista)
