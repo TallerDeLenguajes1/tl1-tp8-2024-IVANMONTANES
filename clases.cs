@@ -11,15 +11,17 @@ public class Tarea{
 
     public void crearTarea(int id){
         string duracionCadena;
-        int duracionAuxiliar;
+        int duracionAuxiliar,cumpleDuracion = 0;
         TareaId = id;
         Console.WriteLine("ingrese la descripcion de la tarea:");
         Descripcion = Console.ReadLine();
+        do{
         Console.WriteLine("ingrese la duracion de la tarea (10-100):");
         duracionCadena = Console.ReadLine();
         if(int.TryParse(duracionCadena,out duracionAuxiliar)){
             if(duracionAuxiliar >= 10 && duracionAuxiliar <= 100){
                 Duracion = duracionAuxiliar;
+                cumpleDuracion = 1;
             }
             else{
                 Console.WriteLine("rango permitido (10-100)");
@@ -28,12 +30,14 @@ public class Tarea{
         else{
             Console.WriteLine("no se ingreso un numero valido");
         }
+        }while(cumpleDuracion == 0);
     }
 
     public void mostrarTarea(){
-        Console.WriteLine("----------TAREA---------");
+        
         Console.WriteLine("descripcion: "+Descripcion);
         Console.WriteLine("duracion: "+Duracion);
         Console.WriteLine("id: "+tareaId);
+        Console.WriteLine("-----------------------------");
     }
 }
