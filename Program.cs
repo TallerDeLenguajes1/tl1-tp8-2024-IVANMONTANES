@@ -1,100 +1,87 @@
-﻿using clases.cs;
-//< >//
-//definimos las listas//
-List<Tarea> tareaPendientes = new List<Tarea>();
-List<Tarea> tareaRealizadas = new List<Tarea>();
-bool seguir = true;
-string elegirOpcionC;
-int id = 1,elegirOpcion;
-int indice = 0,iteracion = 0;
-//cargar tareas//
+﻿//<>//
+using EspacioCalculadora;
+Calculadora nuevaCalculadora = new Calculadora();
+int seguir = 1,numeroCalculo = 1;
 do{
-Console.WriteLine("1: cargar tareas");
-Console.WriteLine("2: marcar tareas como realizadas");
-Console.WriteLine("3: buscar tareas pendientes por su descripcion");
-Console.WriteLine("4: mostrar lista pendientes");
-Console.WriteLine("5: mostrar lista realizados");
-Console.WriteLine("6: salir");
-elegirOpcionC = Console.ReadLine();
-int.TryParse(elegirOpcionC,out elegirOpcion);
-switch(elegirOpcion){
-    case 1:
-        do{
-            String seguirCadena;
-            Tarea nuevaTarea = new Tarea();
-            nuevaTarea.crearTarea(id);
-            tareaPendientes.Add(nuevaTarea);
-            id++;
-            Console.WriteLine("1 para añadir una nueva tarea");
-            seguirCadena = Console.ReadLine();
-            if (seguirCadena != "1"){
-                 seguir = false;
-            }
-        }while(seguir);
-    break;
+    double valorAnterior = nuevaCalculadora.Resultado;
+    Console.WriteLine("valor actual: "+nuevaCalculadora.Resultado);
+    Console.WriteLine("1: sumar un numero");
+    Console.WriteLine("2: restar un numero");
+    Console.WriteLine("3: multiplicar un numero");
+    Console.WriteLine("4: dividir un numero");
+    Console.WriteLine("5: limpiar");
+    Console.WriteLine("6: historial");
+    Console.WriteLine("7: salir");
+    Console.WriteLine("ingrese una opcion:");
+    string opcionC = Console.ReadLine();
+    int opcion = 0;
+    if(int.TryParse(opcionC,out opcion)){
+        if(opcion == 1 || opcion == 2 || opcion == 3 || opcion == 4 || opcion == 5 || opcion == 6){
+            Console.WriteLine("ingrese un numero");
+            string numeroC = Console.ReadLine();
+            int numero = 0;
+            if(int.TryParse(numeroC,out numero)){
+                double nuevoValor = 0;
+                int cargar = 1;
+                TipoOperacion operacion = TipoOperacion.Suma;
+                switch(opcion){
+                    case 1:
+                    nuevaCalculadora.sumar(numero); 
+                    nuevoValor = numero;
+                    operacion = TipoOperacion.Suma;
+                    break;
 
-    case 2:
-        string idElegirC;
-        int idElegir,tareaEncontrada = 0;
-        mostrarLista(tareaPendientes,"tareas pendientes");
-        Console.WriteLine("indique la tarea por id:");
-        idElegirC = Console.ReadLine();
-        int.TryParse(idElegirC,out idElegir);
-            foreach(Tarea tarea in tareaPendientes){
-                if(tarea.TareaId == idElegir){
-                        indice = iteracion;
-                        tareaEncontrada = 1; 
+                    case 2:
+                    nuevaCalculadora.restar(numero); 
+                    nuevoValor = numero;
+                    operacion = TipoOperacion.Resta;
+                    break;
+
+                    case 3:
+                    nuevaCalculadora.multiplicar(numero); 
+                    nuevoValor = numero;
+                    operacion = TipoOperacion.Multiplicacion;
+                    break;
+
+                    case 4: 
+                    nuevaCalculadora.dividir(numero); 
+                    if(numero != 0){
+                        nuevoValor = numero;
+                        operacion = TipoOperacion.Division;
+                    }
+                    else{
+                        cargar = 0;
+                    }
+                    break;
+
+                    case 5:
+                    nuevaCalculadora.limpiar();
+                    nuevoValor = 0;
+                    operacion = TipoOperacion.Limpiar;
+                    break;
+
+                    case 6:
+                    nuevaCalculadora.mostrarHistorial();
+                    cargar = 0;
+                    break;
                 }
-                iteracion++; 
+                if(cargar == 1){
+                    double resultado = nuevaCalculadora.Resultado;
+                    Operacion calculo = new Operacion(valorAnterior,nuevoValor,operacion,resultado,numeroCalculo);
+                    nuevaCalculadora.historial.Add(calculo);
+                    numeroCalculo++;
+                }
             }
-
-        if(tareaEncontrada == 1){
-        tareaRealizadas.Add(tareaPendientes[indice]);
-        tareaPendientes.RemoveAt(indice);
+            else{
+                Console.WriteLine("no se ingreso un numero valido");
+            }
         }
-        iteracion = 0;
-    break;
-
-    case 3:
-    Console.WriteLine("ingrese la descripcion que desea buscar:");
-    string indicacion = Console.ReadLine();
-    int coinciden = 0;
-    foreach(Tarea tarea in tareaPendientes){
-        if(tarea.Descripcion.IndexOf(indicacion) != -1){
-            coinciden = 1;
-            tarea.mostrarTarea();
+        else if(opcion < 1 || opcion > 6){
+            seguir = 0;
         }
-    }
+        else{
+        Console.WriteLine("no se ingreso un numero");
+        }
+}}while(seguir == 1);
+Console.WriteLine("resultado final: "+nuevaCalculadora.Resultado);
 
-    if(coinciden != 1){
-        Console.WriteLine("no se encontro la tarea");
-    }
-    iteracion = 0;
-    break;
-
-    case 4:
-        mostrarLista(tareaPendientes,"TAREAS PENDIENTES");
-    break;
-
-    case 5:
-        mostrarLista(tareaRealizadas,"TAREAS REALIZADAS");
-    break;
-
-    case 6: Console.WriteLine("saliendo..."); break;
-    default: Console.WriteLine("no se escogio una opcion valida, saliendo..."); break;
-}
-}while(elegirOpcion >= 1 && elegirOpcion <=5);
-
-static void mostrarLista(List<Tarea> lista,String nombreLista)
-{
-    Console.WriteLine("**********"+nombreLista+"**********");
-    if(lista.Count != 0){
-    foreach (var tarea in lista)
-    {
-        tarea.mostrarTarea();
-    };
-    }
-    else{
-        Console.WriteLine("la lista esta vacia");
-    }
-}

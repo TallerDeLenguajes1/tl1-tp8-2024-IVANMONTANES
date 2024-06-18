@@ -1,43 +1,87 @@
-namespace clases.cs;
+namespace EspacioCalculadora
+{
 
-public class Tarea{
-    private int tareaId;
-    private String descripcion;
-    private int duracion;
-
-    public int TareaId { get => tareaId; set => tareaId = value; }
-    public string Descripcion { get => descripcion; set => descripcion = value; }
-    public int Duracion { get => duracion; set => duracion = value; }
-
-    public void crearTarea(int id){
-        string duracionCadena;
-        int duracionAuxiliar,cumpleDuracion = 0;
-        TareaId = id;
-        Console.WriteLine("ingrese la descripcion de la tarea:");
-        Descripcion = Console.ReadLine();
-        do{
-        Console.WriteLine("ingrese la duracion de la tarea (10-100):");
-        duracionCadena = Console.ReadLine();
-        if(int.TryParse(duracionCadena,out duracionAuxiliar)){
-            if(duracionAuxiliar >= 10 && duracionAuxiliar <= 100){
-                Duracion = duracionAuxiliar;
-                cumpleDuracion = 1;
-            }
-            else{
-                Console.WriteLine("rango permitido (10-100)");
-            }
-        }
-        else{
-            Console.WriteLine("no se ingreso un numero valido");
-        }
-        }while(cumpleDuracion == 0);
+    public enum TipoOperacion{
+        Suma,
+        Resta,
+        Multiplicacion,
+        Division,
+        Limpiar
     }
 
-    public void mostrarTarea(){
+    public class Operacion{
+        private double resultadoAnterior;
+        private double nuevoValor;
+        private TipoOperacion operacion;
+        private double resultado;
+
+        private int numeroCalculo;
+
+        public Operacion(double ResultadoAnterior, double NuevoValor, TipoOperacion Operacion, double Resultado, int NumeroCalculo){
+            resultadoAnterior = ResultadoAnterior;
+            nuevoValor = NuevoValor;
+            operacion = Operacion;
+            resultado = Resultado;
+            this.NumeroCalculo = NumeroCalculo;
+        }
+
+        public double ResultadoAnterior { get => resultadoAnterior; set => resultadoAnterior = value; }
+        public double NuevoValor { get => nuevoValor; set => nuevoValor = value; }
+        public TipoOperacion Operacio { get => operacion; set => operacion = value; }
+        public double Resutlado { get => resultado; set => resultado = value; }
+        public int NumeroCalculo { get => numeroCalculo; set => numeroCalculo = value; }
+    }
+
+    public class Calculadora{
+        private double dato;
+
+        public List<Operacion> historial = new List<Operacion>();
+
+        //funcion para sumar//
+        public void sumar(double termino){
+            dato += termino;
+        }
+
+        //funcion para restar//
+        public void restar(double termino){
+            dato -= termino;
+        }
+
+        //funcion para multiplicar//
+        public void multiplicar(double termino){
+            dato *= termino;
+        }
+
+        //funcion para dividir//
+        public void dividir(double termino){
+            if(termino != 0){
+                dato /= termino;
+            }
+            else{
+                Console.WriteLine("no se puede dividir en 0");
+            }
+        }
+
+        //funcion para limpiar//
+        public void limpiar(){
+            dato = 0;
+        }
+
+        public double Resultado{
+            get => dato;
+        }
+
         
-        Console.WriteLine("descripcion: "+Descripcion);
-        Console.WriteLine("duracion: "+Duracion);
-        Console.WriteLine("id: "+tareaId);
-        Console.WriteLine("-----------------------------");
+        public void mostrarHistorial(){
+            Console.WriteLine("----------HISTORIAL----------");
+            foreach(var item in historial){
+                Console.WriteLine("----------CALCULO "+item.NumeroCalculo+"----------");
+                Console.WriteLine("resultado anterior: "+item.ResultadoAnterior);
+                Console.WriteLine("nuevo valor: "+item.NuevoValor);
+                Console.WriteLine("tipo operacion: "+item.Operacio);
+                Console.WriteLine("resultado: "+item.Resutlado);
+            }
+        }
+    
     }
 }
