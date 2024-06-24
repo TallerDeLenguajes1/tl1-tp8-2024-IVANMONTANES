@@ -14,7 +14,6 @@ namespace EspacioCalculadora
         private double nuevoValor;
         private TipoOperacion operacion;
         private double resultado;
-
         private int numeroCalculo;
 
         public Operacion(double ResultadoAnterior, double NuevoValor, TipoOperacion Operacion, double Resultado, int NumeroCalculo){
@@ -71,15 +70,20 @@ namespace EspacioCalculadora
             get => dato;
         }
 
-        
         public void mostrarHistorial(){
-            Console.WriteLine("----------HISTORIAL----------");
+            int cantidadElementos = historial.Count();
+            Console.WriteLine("-------------------------HISTORIAL-------------------------");
+            if(cantidadElementos == 0){
+                Console.WriteLine("-------------------------la lista esta vacia-------------------------");
+            }
+            else{
             foreach(var item in historial){
                 Console.WriteLine("----------CALCULO "+item.NumeroCalculo+"----------");
                 Console.WriteLine("resultado anterior: "+item.ResultadoAnterior);
                 Console.WriteLine("nuevo valor: "+item.NuevoValor);
                 Console.WriteLine("tipo operacion: "+item.Operacio);
                 Console.WriteLine("resultado: "+item.Resutlado);
+            }
             }
         }
     
